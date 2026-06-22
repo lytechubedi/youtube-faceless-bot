@@ -8,37 +8,30 @@ from google.oauth2.credentials import Credentials
 st.set_page_config(page_title="Automation Faceless", page_icon="📺", layout="centered")
 
 st.title("📺 Mon Robot de Publication YouTube Faceless")
-st.write("Optimise tes textes avec l'IA et publie directement sur ta chaîne.")
+st.write("Interface épurée : Tes clés sont sauvegardées en toute sécurité.")
 
 st.write("---")
 
-# --- SECTION 1 : CLÉS & ACCÈS ---
-st.header("🔑 1. Configurations des Clés API")
+# --- CHARGEMENT AUTOMATIQUE ET SÉCURISÉ DES CLÉS ---
+try:
+    cle_api_gemini = st.secrets["GEMINI_API_KEY"]
+    client_id = st.secrets["YOUTUBE_CLIENT_ID"]
+    client_secret = st.secrets["YOUTUBE_CLIENT_SECRET"]
+    refresh_token = st.secrets["YOUTUBE_REFRESH_TOKEN"]
+except Exception as e:
+    st.error("⚠️ Les clés secrètes ne sont pas encore configurées dans Streamlit Cloud. Va dans Settings > Secrets pour les ajouter.")
+    st.stop()
 
-cle_api_gemini = st.text_input("Clé API Gemini", type="password", help="Ta clé récupérée sur Google AI Studio")
-
-st.markdown("### 🔒 Accès API YouTube")
-st.write("Entre les identifiants de ton application Google Cloud :")
-client_id = st.text_input("Client ID")
-client_secret = st.text_input("Client Secret", type="password")
-refresh_token = st.text_input("Refresh Token", type="password")
-
-st.write("---")
-
-# --- SECTION 2 : LE CONTENU ---
-st.header("🎬 2. Ta Vidéo & Tes Idées")
+# --- INTERFACE UNIQUE ET RAPIDE ---
+st.header("🎬 Ta Vidéo & Tes Idées")
 uploaded_file = st.file_uploader("Importe ta vidéo MP4 (déjà prête)", type=["mp4"])
-texte_origine = st.text_area("Colle le titre ou la description d'origine ici", placeholder="Ex: Titre d'origine : 3 astuces de motivation. L'IA va le rendre viral.")
+texte_origine = st.text_area("Colle le titre ou la description d'origine ici", placeholder="Ex: Titre d'origine de la vidéo YouTube dont tu t'inspires...")
 
 st.write("---")
 
-# --- SECTION 3 : L'ACTION ---
+# --- ACTION ---
 if st.button("🔥 OPTIMISER ET PUBLIER SUR YOUTUBE"):
-    if not cle_api_gemini:
-        st.warning("⚠️ Il manque ta clé API Gemini.")
-    elif not (client_id and client_secret and refresh_token):
-        st.warning("⚠️ Il manque tes identifiants YouTube API.")
-    elif uploaded_file is None:
+    if uploaded_file is None:
         st.warning("⚠️ Tu as oublié d'importer ta vidéo.")
     elif not texte_origine:
         st.warning("⚠️ Donne un texte d'origine pour guider l'IA.")
@@ -52,7 +45,7 @@ if st.button("🔥 OPTIMISER ET PUBLIER SUR YOUTUBE"):
                     f"Tu es un expert mondial en SEO YouTube Shorts et vidéos virales.\n"
                     f"Prends ce texte d'origine :\n'{texte_origine}'\n\n"
                     f"Génère un pack optimisé au format EXACT suivant :\n"
-                    f"TITRE: [Ton titre viral ici, max 100 caractères, avec emojis]\n"
+                    f"TITRE: [Ton titre viral ici, max 60 caractères, avec emojis]\n"
                     f"DESCRIPTION: [Ta description optimisée avec mots-clés et les 5 meilleurs hashtags]\n"
                 )
 
@@ -63,7 +56,7 @@ if st.button("🔥 OPTIMISER ET PUBLIER SUR YOUTUBE"):
                 
                 texte_ia = response.text
                 
-                # Extraction basique du titre et de la description
+                # Extraction automatique du titre et de la description
                 titre_final = "Vidéo Automatique"
                 description_final = texte_ia
                 
@@ -107,11 +100,11 @@ if st.button("🔥 OPTIMISER ET PUBLIER SUR YOUTUBE"):
                 if os.path.exists(chemin_video_temp):
                     os.remove(chemin_video_temp)
 
-                st.success("🎉 C'EST EN LIGNE ! Vidéo publiée avec succès !")
+                st.success("🎉 C'EST EN LIGNE ! Ton contenu Faceless est publié !")
                 st.write(f"🔗 ID de ta vidéo : {reponse_youtube['id']}")
+                st.write(f"**Titre utilisé :** {titre_final}")
 
         except Exception as e:
             st.error(f"❌ Erreur : {e}")
             if os.path.exists("temp_upload.mp4"):
                 os.remove("temp_upload.mp4")
-
