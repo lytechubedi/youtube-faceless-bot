@@ -52,7 +52,7 @@ if st.button("🔥 OPTIMISER ET PUBLIER SUR YOUTUBE"):
                     f"Tu es un expert mondial en SEO YouTube Shorts et vidéos virales.\n"
                     f"Prends ce texte d'origine :\n'{texte_origine}'\n\n"
                     f"Génère un pack optimisé au format EXACT suivant :\n"
-                    f"TITRE: [Ton titre viral ici, max 60 caractères, avec emojis]\n"
+                    f"TITRE: [Ton titre viral ici, max 100 caractères, avec emojis]\n"
                     f"DESCRIPTION: [Ta description optimisée avec mots-clés et les 5 meilleurs hashtags]\n"
                 )
 
