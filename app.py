@@ -67,7 +67,7 @@ if st.button("🔥 OPTIMISER ET PUBLIER SUR YOUTUBE"):
                 titre_final = "Vidéo Automatique"
                 description_final = texte_ia
                 
-                for ligne in text_ia.split('\n'):
+                for ligne in texte_ia.split('\n'):
                     if ligne.startswith("TITRE:"):
                         titre_final = ligne.replace("TITRE:", "").strip()
                     if ligne.startswith("DESCRIPTION:"):
